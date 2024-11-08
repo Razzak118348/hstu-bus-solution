@@ -1,4 +1,5 @@
 import { useLoaderData } from "react-router-dom";
+import Banner from "../../Components/Banner/Banner";
 
 
 const Home = () => {
@@ -46,9 +47,11 @@ const FromBoromathSortData = FromBoromath.sort((a, b) => {
 
     return (
         <div className="min-h-screen">
+<Banner></Banner>
+
 <div className="flex items-center justify-center mt-16">
 <h2 className="text-3xl font-extrabold text-center text-black mt-10 mb-6 bg-gradient-to-r from-sky-500 to-blue-500 p-2 rounded-lg shadow-md inline-block">
-  Show Buss From HSTU
+  Show Bus From HSTU
 </h2>
 </div>
 <div className="overflow-x-auto mb-10 shadow-lg rounded-lg bg-white p-6">
@@ -86,7 +89,7 @@ const FromBoromathSortData = FromBoromath.sort((a, b) => {
 {/* show buss leaving from  boromath */}
 <div className="flex items-center justify-center mt-16">
   <h2 className="text-3xl font-extrabold text-center text-black mt-10 mb-6 bg-gradient-to-r from-sky-500 to-blue-500 p-2 rounded-lg shadow-md inline-block">
-    Show Buss From BoroMath
+    Show Bus From BoroMath
   </h2>
 </div>
 

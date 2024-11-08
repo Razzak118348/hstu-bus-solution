@@ -3,7 +3,7 @@ import { Cursor, useTypewriter } from "react-simple-typewriter";
 
 const NavTypewriter = () => {
     const [text] = useTypewriter({
-        words: ['HSTU Buss Shedule'],
+        words: ['HSTU Bus Shedule'],
         loop: 2
       })
 

@@ -22,7 +22,7 @@ const Routes = createBrowserRouter(
             {
                 path: '/',
                 element: <Home></Home>,
-                loader: async() => fetch('http://localhost:5000/allbuss')
+                loader: async() => fetch('https://project-server-lac.vercel.app/allbuss')
             },
             {
                 path:'/login',
@@ -40,7 +40,7 @@ const Routes = createBrowserRouter(
             {
                 path:'/admin',
                 element: <Admin></Admin>,
-                loader: async()=> fetch('http://localhost:5000/allbuss')
+                loader: async()=> fetch('https://project-server-lac.vercel.app/allbuss')
             },
             {
                 path:'/teacher',
@@ -49,7 +49,7 @@ const Routes = createBrowserRouter(
             {
                 path:'/allbuss/:id',
                 element: <Update></Update>,
-                loader: async({params}) => fetch(`http://localhost:5000/allbuss/${params.id}`)
+                loader: async({params}) => fetch(`https://project-server-lac.vercel.app/allbuss/${params.id}`)
             }
 
 

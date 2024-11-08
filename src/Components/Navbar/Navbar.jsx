@@ -5,19 +5,18 @@ import NavTypewriter from "../NavTypewriter/NavTypewriter";
 
 const Navbar = () => {
   const { LogOut, user} = useAuth()
-  const email = user ? user.email : "ab@gmail.com";
+  const email = user ? user.email : "ak@mail.com";
 
   const Navlink = <>
     <li><NavLink className=" mr-1   md:mr-4  my-0 md:my-0 F font-bold text-base " to='/'>Home</NavLink> </li>
-    <li><NavLink className=" mr-1  md:mr-4  my-0 md:my-0  font-bold text-base " to='/bussStopage'>Buss Stopage</NavLink></li>
+    <li><NavLink className=" mr-1  md:mr-4  my-0 md:my-0  font-bold text-base " to='/bussStopage'>Bus Stopage</NavLink></li>
     <li><NavLink className=" mr-1   md:mr-4  my-0 md:my-0 font-bold text-base " to='/teacher'>Faculty Authority Request</NavLink></li>
 
-    {email === "abdurrazzak118348@gmail.com"||"amithasan16hstu@gmail.com" && (
-  <>
- <li> <NavLink className="mr-1   md:mr-4  my-0 md:my-0 font-bold text-base " to='/admin'>Admin</NavLink></li>
-  </>
-  )
-  }
+    {(email === "abdurrazzak118348@gmail.com" || email === "amithasan16hstu@gmail.com" || email === "lipaanam32@gmail.com") && (
+      <li><NavLink className="mr-1 md:mr-4 my-0 md:my-0 font-bold text-base" to='/admin'>Admin</NavLink></li>
+    )}
+
+
   </>
 
 
