@@ -14,7 +14,7 @@ const handleUpdate = (e) => {
 }
 
     return (
-        <div>
+        <div className='min-h-screen'>
 <div className="max-w-xl mx-auto mt-10 bg-white p-8 rounded-lg shadow-lg mb-16">
         <h2 className="text-3xl text-center font-bold text-blue-600 mb-6">Update The Bus Schedule</h2>
         <form onSubmit={handleUpdate} className=" grid grid-cols-2 md:grid-cols-3 gap-5">

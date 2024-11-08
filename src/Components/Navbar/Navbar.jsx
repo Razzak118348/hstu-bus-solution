@@ -12,7 +12,7 @@ const Navbar = () => {
     <li><NavLink className=" mr-1  md:mr-4  my-0 md:my-0  font-bold text-base " to='/bussStopage'>Buss Stopage</NavLink></li>
     <li><NavLink className=" mr-1   md:mr-4  my-0 md:my-0 font-bold text-base " to='/teacher'>Faculty Authority Request</NavLink></li>
 
-    {email === "abdurrazzak118348@gmail.com" && (
+    {email === "abdurrazzak118348@gmail.com"||"amithasan16hstu@gmail.com" && (
   <>
  <li> <NavLink className="mr-1   md:mr-4  my-0 md:my-0 font-bold text-base " to='/admin'>Admin</NavLink></li>
   </>
