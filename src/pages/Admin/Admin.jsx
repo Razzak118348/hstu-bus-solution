@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 const Admin = () => {
     const allBus = useLoaderData();
+    const [requestedData , setRequestdData] = useState([])
+
+//load faculty request
+useEffect(()=>{
+    fetch('https://project-server-lac.vercel.app/allRequest')
+    .then(res=>res.json())
+    .then(data =>{
+setRequestdData(data)
+    })
+},[])
+
+
     const [remainigBus, setRemainingBus] = useState(allBus || [])
 
     const FromHstu = remainigBus.filter((bus) => bus.leaving_place.toLowerCase().includes("hstu")) //Case-insensitive filtering
@@ -207,7 +219,6 @@ const Admin = () => {
                     Show Bus From BoroMath
                 </h2>
             </div>
-
             <div className="overflow-x-auto mb-10 shadow-lg rounded-lg bg-white p-6">
                 <table className="table w-full border-separate border-spacing-0">
                     {/* Header */}
@@ -247,6 +258,43 @@ const Admin = () => {
             </div>
 
 
+{/* show faculty request  */}
+<div className="flex items-center justify-center mt-16">
+                <h2 className="text-3xl font-extrabold text-center text-black mt-10 mb-6 bg-gradient-to-r from-sky-500 to-blue-500 p-2 rounded-lg shadow-md inline-block">
+Buss Request
+                </h2>
+            </div>
+            <div className="overflow-x-auto mb-10 shadow-lg rounded-lg bg-white p-6">
+                <table className="table w-full border-separate border-spacing-0">
+                    {/* Header */}
+                    <thead>
+                        <tr className="bg-gradient-to-r from-sky-500 to-blue-500 text-white rounded-t-lg">
+                            <th className="p-4 text-left rounded-tl-lg">Serial No.</th>
+                            <th className="p-4 text-left">Faculty Id</th>
+                            <th className="p-4 text-left">Category Name</th>
+                            <th className="p-4 text-left">Leaving Time</th>
+                            <th className="p-4 text-left">Leaving Place</th>
+
+                        </tr>
+                    </thead>
+                    {/* Body */}
+                    <tbody>
+                        {requestedData.map((bus, index) => (
+                            <tr
+                                key={bus._id}
+                                className={`${index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                                    } hover:bg-sky-100 transition duration-200`}
+                            >
+                                <td className="p-4 border-b text-gray-700">{index + 1}</td>
+                                <td className="p-4 border-b text-gray-700">{bus.faculty}</td>
+                                <td className="p-4 border-b text-gray-700">{bus.category}</td>
+                                <td className="p-4 border-b text-gray-700">{bus.leaving_time}</td>
+                                <td className="p-4 border-b text-gray-700">{bus.leaving_place}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
     );

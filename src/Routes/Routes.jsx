@@ -47,7 +47,7 @@ const Routes = createBrowserRouter(
                 element: <Teachers></Teachers>
             },
             {
-                path:'/allbuss/:id',
+                path:'/allbus/:id',
                 element: <Update></Update>,
                 loader: async({params}) => fetch(`https://project-server-lac.vercel.app/allbuss/${params.id}`)
             }
