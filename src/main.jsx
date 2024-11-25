@@ -9,9 +9,10 @@ import Routes from './Routes/Routes'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ContextApi children={<RouterProvider router={Routes}
-    fallbackElement={<div>Loading...</div>}
-    ></RouterProvider>} ></ContextApi>
+    <ContextApi >
+    <RouterProvider router={Routes}
+></RouterProvider>
+    </ContextApi>
 
   </StrictMode>,
 )

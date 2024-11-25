@@ -64,7 +64,7 @@ setRequestdData(data)
         const leaving_place = form.leaving_place.value;
         const bus = { category, leaving_time, leaving_place };
 
-        fetch('https://project-server-lac.vercel.app/allbus', {
+        fetch('https://project-server-lac.vercel.app/allbuss', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -107,6 +107,39 @@ setRequestdData(data)
                         if (data.deletedCount) {
 
                             const remaining = allBus.filter(bus => bus._id != id)
+                            setRequestdData(remaining)
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your Bass has been deleted.",
+                                icon: "success"
+                            });
+                        }
+
+                    })
+
+            }
+        });
+    }
+
+    const handleDeleteRequest = (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`https://project-server-lac.vercel.app/allRequest/${id}`, {
+                    method: "DELETE",
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.deletedCount) {
+
+                            const remaining = requestedData.filter(bus => bus._id != id)
                             setRemainingBus(remaining)
                             Swal.fire({
                                 title: "Deleted!",
@@ -274,7 +307,7 @@ Buss Request
                             <th className="p-4 text-left">Category Name</th>
                             <th className="p-4 text-left">Leaving Time</th>
                             <th className="p-4 text-left">Leaving Place</th>
-
+<th>Status</th>
                         </tr>
                     </thead>
                     {/* Body */}
@@ -290,6 +323,7 @@ Buss Request
                                 <td className="p-4 border-b text-gray-700">{bus.category}</td>
                                 <td className="p-4 border-b text-gray-700">{bus.leaving_time}</td>
                                 <td className="p-4 border-b text-gray-700">{bus.leaving_place}</td>
+                                <td><button onClick={()=>handleDeleteRequest(bus._id)} className="text-center btn bg-sky-400">Delete</button></td>
                             </tr>
                         ))}
                     </tbody>
