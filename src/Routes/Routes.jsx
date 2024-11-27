@@ -1,7 +1,7 @@
 
 
 import { createBrowserRouter } from "react-router-dom";
-import Home from "../Pages/Home/Home";
+
 import Login from "../pages/Login/Login";
 import Signup from "../pages/SignUp/SignUp";
 import Root from "../Root/Root";
@@ -10,6 +10,7 @@ import Stopage from "../pages/Stopage/Stopage";
 import Admin from "../pages/Admin/Admin";
 import Teachers from "../pages/Teachers/Teachers";
 import Update from "../pages/update/update";
+import Home from "../pages/Home/Home";
 
 
 const Routes = createBrowserRouter(

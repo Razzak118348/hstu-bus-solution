@@ -1,130 +1,145 @@
 import { useLoaderData } from "react-router-dom";
+import { useState } from "react";
 import Banner from "../../Components/Banner/Banner";
 
-
 const Home = () => {
+  // Sanitize data: trim spaces and normalize to lowercase where necessary
+  const sanitizeData = (data) => {
+    return data.map((buss) => ({
+      ...buss,
+      category: buss.category.trim().toLowerCase(),
+      leaving_time: buss.leaving_time.trim(),
+      leaving_place: buss.leaving_place.trim().toLowerCase(),
+    }));
+  };
 
-    const allBuss = useLoaderData();
-    const FromHstu = allBuss.filter((buss) => buss.leaving_place.toLowerCase().includes("hstu"))
-    const FromHstuSortData = FromHstu.sort((a, b) => {
-        // Function to convert 12-hour time format (e.g., "6 am", "7 pm") to 24-hour format for comparison
-        const convertTo24HourFormat = (time) => {
-          const [hour, minute] = time.split(' ')[0].split(':');
-          const ampm = time.split(' ')[1];
-          let hour24 = parseInt(hour);
-          if (ampm === "pm" && hour24 < 12) hour24 += 12;
-          if (ampm === "am" && hour24 === 12) hour24 = 0; // For "12 am"
-          return new Date(1970, 0, 1, hour24, minute || 0); // Create a Date object for comparison
-        };
+  // Load data and sanitize it
+  const allBuss = sanitizeData(useLoaderData());
 
-        // Compare the times
-        const timeA = convertTo24HourFormat(a.leaving_time);
-        const timeB = convertTo24HourFormat(b.leaving_time);
-        return timeA - timeB; // Sorting in ascending order
-      })
+  // State for dropdown category selection
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
-      const FromBoromath = allBuss.filter((buss) => buss.leaving_place.toLowerCase().includes("boromath")) //Case-insensitive filtering
+  // Convert 12-hour time to 24-hour format for sorting
+  const convertTo24HourFormat = (time) => {
+    if (!time.includes("am") && !time.includes("pm")) {
+      time += " am";
+    }
 
-const FromBoromathSortData = FromBoromath.sort((a, b) => {
-    // Function to convert 12-hour time format (e.g., "6 am", "7 pm") to 24-hour format for comparison
-    const convertTo24HourFormat = (time) => {
-      const [hour, minute] = time.split(' ')[0].split(':');
-      const ampm = time.split(' ')[1];
-      let hour24 = parseInt(hour);
-      if (ampm === "pm" && hour24 < 12) hour24 += 12;
-      if (ampm === "am" && hour24 === 12) hour24 = 0; // For "12 am"
-      return new Date(1970, 0, 1, hour24, minute || 0); // Create a Date object for comparison
-    };
+    const [hour, minute] = time.split(" ")[0].split(":");
+    const ampm = time.split(" ")[1];
+    let hour24 = parseInt(hour);
+    if (ampm === "pm" && hour24 < 12) hour24 += 12;
+    if (ampm === "am" && hour24 === 12) hour24 = 0;
+    return new Date(1970, 0, 1, hour24, parseInt(minute || 0));
+  };
 
-    // Compare the times
-    const timeA = convertTo24HourFormat(a.leaving_time);
-    const timeB = convertTo24HourFormat(b.leaving_time);
-    return timeA - timeB; // Sorting in ascending order
-  })
+  // Filter buses by category and leaving place
+  const filterBuses = (place) => {
+    return allBuss
+      .filter((buss) =>
+        selectedCategory === "all"
+          ? true
+          : buss.category === selectedCategory
+      )
+      .filter((buss) => buss.leaving_place.includes(place.toLowerCase()))
+      .sort(
+        (a, b) =>
+          convertTo24HourFormat(a.leaving_time) -
+          convertTo24HourFormat(b.leaving_time)
+      );
+  };
 
+  // Get sorted data for specific places
+  const fromHstuSortedData = filterBuses("hstu");
+  const fromBoromathSortedData = filterBuses("boromath");
 
+  return (
+    <div className="min-h-screen bg-gray-50 py-10">
+      <Banner />
 
+      {/* Dropdown for category selection */}
+      <div className="flex justify-center mt-10">
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value.toLowerCase())}
+          className="p-3 rounded-lg border border-gray-300 shadow-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+        >
+          <option value="all">All</option>
+          <option value="student">Student</option>
+          <option value="teacher">Teacher</option>
+          <option value="staff">Staff</option>
+        </select>
+      </div>
 
-    return (
-        <div className="min-h-screen">
-<Banner></Banner>
+      {/* Show buses from HSTU */}
+      <div className="mt-10">
+        <h2 className="text-3xl font-bold text-center text-sky-700">
+          Show Bus From HSTU
+        </h2>
+        <BusTable data={fromHstuSortedData} />
+      </div>
 
-<div className="flex items-center justify-center mt-16">
-<h2 className="text-3xl font-extrabold text-center text-black mt-10 mb-6 bg-gradient-to-r from-sky-500 to-blue-500 p-2 rounded-lg shadow-md inline-block">
-  Show Bus From HSTU
-</h2>
-</div>
-<div className="overflow-x-auto mb-10 shadow-lg rounded-lg bg-white p-6">
-  <table className="table w-full border-separate border-spacing-0">
-    {/* Header */}
-    <thead>
-      <tr className="bg-gradient-to-r from-sky-500 to-blue-500 text-white rounded-t-lg">
-        <th className="p-4 text-left rounded-tl-lg">Serial No.</th>
-        <th className="p-4 text-left">Category Name</th>
-        <th className="p-4 text-left">Leaving Time</th>
-        <th className="p-4 text-left">Leaving Place</th>
+      {/* Show buses from Boromath */}
+      <div className="mt-10">
+        <h2 className="text-3xl font-bold text-center text-sky-700">
+          Show Bus From Boromath
+        </h2>
+        <BusTable data={fromBoromathSortedData} />
+      </div>
+    </div>
+  );
+};
 
-      </tr>
-    </thead>
-    {/* Body */}
-    <tbody>
-      {FromHstuSortData.map((buss, index) => (
-          <tr
-            key={buss._id}
-            className={`${
-              index % 2 === 0 ? "bg-gray-50" : "bg-white"
-            } hover:bg-sky-100 transition duration-200`}
-          >
-            <td className="p-4 border-b text-gray-700">{index + 1}</td>
-            <td className="p-4 border-b text-gray-700">{buss.category}</td>
-            <td className="p-4 border-b text-gray-700">{buss.leaving_time}</td>
-            <td className="p-4 border-b text-gray-700">{buss.leaving_place}</td>
+// BusTable Component
+const BusTable = ({ data }) => {
+  return (
+    <div className="overflow-x-auto">
+      <table className="table-auto w-full mt-5 border-collapse bg-white rounded-lg shadow-lg overflow-hidden">
+        <thead>
+          <tr className="bg-gradient-to-r from-sky-500 to-blue-500 text-white text-sm uppercase">
+            <th className="px-6 py-4 text-left font-semibold">#</th>
+            <th className="px-6 py-4 text-left font-semibold">Category</th>
+            <th className="px-6 py-4 text-left font-semibold">Leaving Time</th>
+            <th className="px-6 py-4 text-left font-semibold">Leaving Place</th>
           </tr>
-        ))}
-    </tbody>
-  </table>
-</div>
-
-
-{/* show buss leaving from  boromath */}
-<div className="flex items-center justify-center mt-16">
-  <h2 className="text-3xl font-extrabold text-center text-black mt-10 mb-6 bg-gradient-to-r from-sky-500 to-blue-500 p-2 rounded-lg shadow-md inline-block">
-    Show Bus From BoroMath
-  </h2>
-</div>
-
-<div className="overflow-x-auto mb-10 shadow-lg rounded-lg bg-white p-6">
-  <table className="table w-full border-separate border-spacing-0">
-    {/* Header */}
-    <thead>
-      <tr className="bg-gradient-to-r from-sky-500 to-blue-500 text-white rounded-t-lg">
-        <th className="p-4 text-left rounded-tl-lg">Serial No.</th>
-        <th className="p-4 text-left">Category Name</th>
-        <th className="p-4 text-left">Leaving Time</th>
-        <th className="p-4 text-left">Leaving Place</th>
-
-      </tr>
-    </thead>
-    {/* Body */}
-    <tbody>
-      {FromBoromathSortData.map((buss, index) => (
-          <tr
-            key={buss._id}
-            className={`${
-              index % 2 === 0 ? "bg-gray-50" : "bg-white"
-            } hover:bg-sky-100 transition duration-200`}
-          >
-            <td className="p-4 border-b text-gray-700">{index + 1}</td>
-            <td className="p-4 border-b text-gray-700">{buss.category}</td>
-            <td className="p-4 border-b text-gray-700">{buss.leaving_time}</td>
-            <td className="p-4 border-b text-gray-700">{buss.leaving_place}</td>
-          </tr>
-        ))}
-    </tbody>
-  </table>
-</div>
-        </div>
-    );
+        </thead>
+        <tbody>
+          {data.length > 0 ? (
+            data.map((buss, index) => (
+              <tr
+                key={buss._id}
+                className={`${
+                  index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                } hover:bg-sky-100 transition duration-300`}
+              >
+                <td className="border px-6 py-4 text-gray-800 font-medium">
+                  {index + 1}
+                </td>
+                <td className="border px-6 py-4 text-gray-800">
+                  {buss.category}
+                </td>
+                <td className="border px-6 py-4 text-gray-800">
+                  {buss.leaving_time}
+                </td>
+                <td className="border px-6 py-4 text-gray-800">
+                  {buss.leaving_place}
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td
+                colSpan="4"
+                className="text-center py-8 text-gray-600 font-medium"
+              >
+                No data available
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
 };
 
 export default Home;
