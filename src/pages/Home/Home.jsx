@@ -1,6 +1,7 @@
 import { useLoaderData } from "react-router-dom";
 import { useState } from "react";
 import Banner from "../../Components/Banner/Banner";
+import Marquees from "../../Components/Marquee/Marquee";
 
 const Home = () => {
   // Sanitize data: trim spaces and normalize to lowercase where necessary
@@ -56,7 +57,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-10">
       <Banner />
-
+<Marquees></Marquees>
       {/* Dropdown for category selection */}
       <div className="flex justify-center mt-10">
         <select
