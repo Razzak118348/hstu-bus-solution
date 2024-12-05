@@ -11,6 +11,7 @@ import Admin from "../pages/Admin/Admin";
 import Teachers from "../pages/Teachers/Teachers";
 import Update from "../pages/update/update";
 import Home from "../pages/Home/Home";
+import PrivetRout from "./PrivateRout";
 
 
 const Routes = createBrowserRouter(
@@ -45,7 +46,7 @@ const Routes = createBrowserRouter(
             },
             {
                 path:'/teacher',
-                element: <Teachers></Teachers>
+                element: <PrivetRout children={<Teachers></Teachers>}></PrivetRout>
             },
             {
                 path:'/allbus/:id',

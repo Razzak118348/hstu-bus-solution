@@ -4,7 +4,7 @@ const Marquees = () => {
     return (
         <div className="mt-5">
 <Marquee>
-  The student bus No-15 of 2:00 pm from HSTU can be delay 10 minutes . Please be patient.
+ <p> The student  <span className="text-rose-500"> bus No-15 of 2:00 pm </span> from HSTU can be delay <span className="text-red-500"> 10 minutes,</span>  Please be patient.</p>
 </Marquee>
         </div>
     );

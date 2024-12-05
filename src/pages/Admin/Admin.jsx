@@ -4,16 +4,16 @@ import Swal from 'sweetalert2'
 
 const Admin = () => {
     const allBus = useLoaderData();
-    const [requestedData , setRequestdData] = useState([])
+    const [requestedData, setRequestdData] = useState([])
 
-//load faculty request
-useEffect(()=>{
-    fetch('https://project-server-lac.vercel.app/allRequest')
-    .then(res=>res.json())
-    .then(data =>{
-setRequestdData(data)
-    })
-},[])
+    //load faculty request
+    useEffect(() => {
+        fetch('https://project-server-lac.vercel.app/allRequest')
+            .then(res => res.json())
+            .then(data => {
+                setRequestdData(data)
+            })
+    }, [])
 
 
     const [remainigBus, setRemainingBus] = useState(allBus || [])
@@ -62,7 +62,8 @@ setRequestdData(data)
         const category = form.category.value;
         const leaving_time = form.leaving_time.value;
         const leaving_place = form.leaving_place.value;
-        const bus = { category, leaving_time, leaving_place };
+        const bus_number = form.bus_number.value
+        const bus = { category, leaving_time, leaving_place, bus_number };
 
         fetch('https://project-server-lac.vercel.app/allbuss', {
             method: 'POST',
@@ -99,15 +100,14 @@ setRequestdData(data)
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`https://project-server-lac.vercel.app/deletebus/${id}`, {
+                fetch(`https://project-server-lac.vercel.app/deletebuss/${id}`, {
                     method: "DELETE",
                 })
                     .then(res => res.json())
                     .then(data => {
                         if (data.deletedCount) {
-
                             const remaining = allBus.filter(bus => bus._id != id)
-                            setRequestdData(remaining)
+                            setRemainingBus(remaining)
                             Swal.fire({
                                 title: "Deleted!",
                                 text: "Your Bass has been deleted.",
@@ -140,7 +140,7 @@ setRequestdData(data)
                         if (data.deletedCount) {
 
                             const remaining = requestedData.filter(bus => bus._id != id)
-                            setRemainingBus(remaining)
+                            setRequestdData(remaining)
                             Swal.fire({
                                 title: "Deleted!",
                                 text: "Your Bass has been deleted.",
@@ -156,48 +156,65 @@ setRequestdData(data)
 
     return (
         <div className="min-h-screen">
-            <div className="max-w-xl mx-auto mt-10 bg-white p-8 rounded-lg shadow-lg mb-16">
+            <div className="max-w-2xl mx-auto mt-10 bg-white p-8 rounded-lg shadow-lg mb-16">
                 <h2 className="text-3xl text-center font-bold text-blue-600 mb-6">Input a Bus Schedule</h2>
-                <form onSubmit={handleAddBus} className=" grid grid-cols-2 md:grid-cols-3 gap-5">
+                <form onSubmit={handleAddBus} >
 
-                    <div>
-                        <label className="label font-semibold text-gray-700">
-                            <span className="label-text">Category</span>
-                        </label>
-                        <input
-                            type="text"
-                            placeholder="Category name"
-                            name="category"
-                            className="input input-bordered w-full p-3 rounded-lg border-2 border-blue-400 focus:outline-none focus:border-blue-600"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="label font-semibold text-gray-700">
-                            <span className="label-text">Leaving Time</span>
-                        </label>
-                        <input
-                            type="text"
-                            placeholder="Leaving time"
-                            name="leaving_time"
-                            className="input input-bordered w-full p-3 rounded-lg border-2 border-blue-400 focus:outline-none focus:border-blue-600"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="label font-semibold text-gray-700">
-                            <span className="label-text">Leaving Place</span>
-                        </label>
-                        <input
-                            type="text"
-                            placeholder="Leaving place"
-                            name="leaving_place"
-                            className="input input-bordered w-full p-3 rounded-lg border-2 border-blue-400 focus:outline-none focus:border-blue-600"
-                            required
-                        />
+                    <div className=" grid grid-cols-2 md:grid-cols-4 gap-5">
+                        <div>
+                            <label className="label font-semibold text-gray-700">
+                                <span className="label-text">Category</span>
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Category name"
+                                name="category"
+                                className="input input-bordered w-full p-3 rounded-lg border-2 border-blue-400 focus:outline-none focus:border-blue-600"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label className="label font-semibold text-gray-700">
+                                <span className="label-text">Leaving Time</span>
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Leaving time"
+                                name="leaving_time"
+                                className="input input-bordered w-full p-3 rounded-lg border-2 border-blue-400 focus:outline-none focus:border-blue-600"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label className="label font-semibold text-gray-700">
+                                <span className="label-text">Bus Number</span>
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Bus Number"
+                                name="bus_number"
+                                className="input input-bordered w-full p-3 rounded-lg border-2 border-blue-400 focus:outline-none focus:border-blue-600"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="label font-semibold text-gray-700">
+                                <span className="label-text">Leaving Place</span>
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Leaving place"
+                                name="leaving_place"
+                                className="input input-bordered w-full p-3 rounded-lg border-2 border-blue-400 focus:outline-none focus:border-blue-600"
+                                required
+                            />
+                        </div>
                     </div>
 
-                    <input className="bg-yellow-400 p-1 input w-full mx-0 md:mx-40 rounded-lg mt-8 md:mt-0 " type="submit" value={'Add New Bus'} />
+<div className="flex justify-center mt-10">
+<input className="bg-yellow-400 p-1 input mx-auto rounded-lg mt-10 md:mt-0 " type="submit" value={'Add New Bus'} />
+</div>
                 </form>
             </div>
 
@@ -216,6 +233,7 @@ setRequestdData(data)
                             <th className="p-4 text-left">Category Name</th>
                             <th className="p-4 text-left">Leaving Time</th>
                             <th className="p-4 text-left">Leaving Place</th>
+                            <th className="p-4 text-left">Bus Number</th>
                             <th className="p-4 text-left rounded-tr-lg">Status</th>
                         </tr>
                     </thead>
@@ -231,6 +249,7 @@ setRequestdData(data)
                                 <td className="p-4 border-b text-gray-700">{bus.category}</td>
                                 <td className="p-4 border-b text-gray-700">{bus.leaving_time}</td>
                                 <td className="p-4 border-b text-gray-700">{bus.leaving_place}</td>
+                                <td className="p-4 border-b text-gray-700">{bus.bus_number}</td>
                                 <td className="p-4 border-b">
                                     <Link to={`/allbus/${bus._id}`}>
                                         <button className="btn bg-gradient-to-r from-sky-400 to-blue-400 text-white hover:from-blue-500 hover:to-sky-500 shadow-md rounded-lg py-2 px-4">
@@ -261,6 +280,7 @@ setRequestdData(data)
                             <th className="p-4 text-left">Category Name</th>
                             <th className="p-4 text-left">Leaving Time</th>
                             <th className="p-4 text-left">Leaving Place</th>
+                            <th className="p-4 text-left">Bus Number</th>
                             <th className="p-4 text-left rounded-tr-lg">Status</th>
                         </tr>
                     </thead>
@@ -276,6 +296,7 @@ setRequestdData(data)
                                 <td className="p-4 border-b text-gray-700">{bus.category}</td>
                                 <td className="p-4 border-b text-gray-700">{bus.leaving_time}</td>
                                 <td className="p-4 border-b text-gray-700">{bus.leaving_place}</td>
+                                <td className="p-4 border-b text-gray-700">{bus.bus_number}</td>
                                 <td className="p-4 border-b">
                                     <Link to={`/allbus/${bus._id}`}>
                                         <button className="btn bg-gradient-to-r from-sky-400 to-blue-400 text-white hover:from-blue-500 hover:to-sky-500 shadow-md rounded-lg py-2 px-4">
@@ -291,10 +312,10 @@ setRequestdData(data)
             </div>
 
 
-{/* show faculty request  */}
-<div className="flex items-center justify-center mt-16">
+            {/* show faculty request  */}
+            <div className="flex items-center justify-center mt-16">
                 <h2 className="text-3xl font-extrabold text-center text-black mt-10 mb-6 bg-gradient-to-r from-sky-500 to-blue-500 p-2 rounded-lg shadow-md inline-block">
-Buss Request
+                    Buss Request
                 </h2>
             </div>
             <div className="overflow-x-auto mb-10 shadow-lg rounded-lg bg-white p-6">
@@ -307,7 +328,7 @@ Buss Request
                             <th className="p-4 text-left">Category Name</th>
                             <th className="p-4 text-left">Leaving Time</th>
                             <th className="p-4 text-left">Leaving Place</th>
-<th>Status</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     {/* Body */}
@@ -323,7 +344,7 @@ Buss Request
                                 <td className="p-4 border-b text-gray-700">{bus.category}</td>
                                 <td className="p-4 border-b text-gray-700">{bus.leaving_time}</td>
                                 <td className="p-4 border-b text-gray-700">{bus.leaving_place}</td>
-                                <td><button onClick={()=>handleDeleteRequest(bus._id)} className="text-center btn bg-sky-400">Delete</button></td>
+                                <td><button onClick={() => handleDeleteRequest(bus._id)} className="text-center btn bg-sky-400">Delete</button></td>
                             </tr>
                         ))}
                     </tbody>
