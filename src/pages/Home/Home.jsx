@@ -102,6 +102,7 @@ const BusTable = ({ data }) => {
             <th className="px-6 py-4 text-left font-semibold">Category</th>
             <th className="px-6 py-4 text-left font-semibold">Leaving Time</th>
             <th className="px-6 py-4 text-left font-semibold">Leaving Place</th>
+            <th className="px-6 py-4 text-left font-semibold">Bus Number</th>
           </tr>
         </thead>
         <tbody>
@@ -124,6 +125,9 @@ const BusTable = ({ data }) => {
                 </td>
                 <td className="border px-6 py-4 text-gray-800">
                   {buss.leaving_place}
+                </td>
+                <td className="border px-6 py-4 text-gray-800">
+                  {buss.bus_number}
                 </td>
               </tr>
             ))
