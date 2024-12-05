@@ -13,7 +13,8 @@ console.log(singleBuss,id)
     const category = form.category.value;
     const leaving_time = form.leaving_time.value;
     const leaving_place = form.leaving_place.value;
-    const updateBuss = { category, leaving_time, leaving_place };
+    const bus_number = form.bus_number.value;
+    const updateBuss = { category, leaving_time, leaving_place,bus_number };
     console.log(updateBuss)
 
     fetch(`https://project-server-lac.vercel.app/allbuss/${id}`, {
@@ -50,8 +51,9 @@ console.log(singleBuss,id)
     <div className='my-20'>
       <div className="max-w-xl mx-auto mt-10 bg-white p-8 rounded-lg shadow-lg mb-16">
         <h2 className="text-3xl text-center font-bold text-blue-600 mb-6">Update The Bus Schedule</h2>
-        <form onSubmit={handleUpdate} className="grid grid-cols-2 md:grid-cols-3 gap-5">
-          <div>
+        <form onSubmit={handleUpdate} >
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+        <div>
             <label className="label font-semibold text-gray-700">
               <span className="label-text">Category</span>
             </label>
@@ -90,11 +92,27 @@ console.log(singleBuss,id)
               required
             />
           </div>
+          <div>
+            <label className="label font-semibold text-gray-700">
+              <span className="label-text">Bus Number</span>
+            </label>
+            <input
+              type="text"
+              placeholder="bus number"
+              defaultValue={singleBuss.bus_number}
+              name="bus_number"
+              className="input input-bordered w-full p-3 rounded-lg border-2 border-blue-400 focus:outline-none focus:border-blue-600"
+              required
+            />
+          </div>
+        </div>
+          <div  className="flex justify-center mt-10">
           <input
-            className="bg-green-500 p-1 input w-full mx-0 md:mx-40 rounded-lg mt-8 md:mt-0"
+            className="bg-green-500 p-1 input rounded-lg mt-8 md:mt-0"
             type="submit"
             value="Update the Schedule"
           />
+          </div>
         </form>
       </div>
     </div>
